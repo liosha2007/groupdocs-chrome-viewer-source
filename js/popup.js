@@ -47,6 +47,10 @@ var GroupDocsPlugin = {
 		$('#copyBtn').click(function (){
 			GroupDocsPlugin.copyDocument();
 		});
+		// Initialize move buttin
+		$('#moveBtn').click(function (){
+			GroupDocsPlugin.moveDocument();
+		});
 	},
 	onLogout: function (){
 		// Logout function
@@ -132,14 +136,14 @@ var GroupDocsPlugin = {
 		$('#filesTree').find('div.selected').removeClass('selected');
 		$(this).addClass('selected');
 		$('#fileId').val('');
-		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn').attr('disabled', 'disabled');
+		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn').attr('disabled', 'disabled');
 	},
 	onFile: function (){
 		// File selected
 		$('#filesTree').find('div.selected').removeClass('selected');
 		$(this).addClass('selected');
 		$('#fileId').val($(this).attr('id'));
-		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn').removeAttr('disabled');
+		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn').removeAttr('disabled');
 	},
 	onShowDocument: function (){
 		// Show document
@@ -172,7 +176,7 @@ var GroupDocsPlugin = {
                 editableDiv.removeClass('editable');
                 editableDiv.removeAttr('contenteditable');
                 GroupDocsManager.getDocumentMetadata($(editableDiv).attr('id'), function (docMetadata){
-                	if (docMetadata.id !== undefined){
+                	if (docMetadata !== undefined && docMetadata.id !== undefined){
 	                	GroupDocsManager.renameFile(path + newName, docMetadata.id, function (success, responce){
 	                		if (success){
 		                		//alert(success);
@@ -206,8 +210,29 @@ var GroupDocsPlugin = {
 		DirectoryChoicer.okButtonClick = function (){
 			DirectoryChoicer.hide();
 			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (docMetadata){
-				if (docMetadata.id !== undefined){
+				if (docMetadata !== undefined && docMetadata.id !== undefined){
 					GroupDocsManager.copyFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce){
+                		if (success){
+                			GroupDocsPlugin.contentShowed();
+	                		//alert(success);
+                		}
+                		else {
+                    		//
+                		}
+                	});
+				}
+			});
+		}
+	},
+	moveDocument: function (){
+		var selectedDiv = $('#filesTree').find('div.selected');
+		var fileName = selectedDiv.html();
+		DirectoryChoicer.show();
+		DirectoryChoicer.okButtonClick = function (){
+			DirectoryChoicer.hide();
+			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (docMetadata){
+				if (docMetadata !== undefined && docMetadata.id !== undefined){
+					GroupDocsManager.moveFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce){
                 		if (success){
                 			GroupDocsPlugin.contentShowed();
 	                		//alert(success);

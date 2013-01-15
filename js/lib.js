@@ -121,7 +121,7 @@ var GroupDocsManager = {
 		}, this.cid, fileId);
 	},
 	renameFile: function (filePath, idFile, callback){
-		// Move file
+		// Rename file
 		var apiClient = this._createApiClient(this.pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.MoveFile({
@@ -134,7 +134,7 @@ var GroupDocsManager = {
 		}, this.cid, filePath, null, null, idFile);
 	},
 	copyFile: function (filePath, idFile, callback){
-		// Move file
+		// Copy file
 		var apiClient = this._createApiClient(this.pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.MoveFile({
@@ -145,5 +145,18 @@ var GroupDocsManager = {
 				callback(false, response);
 			}
 		}, this.cid, filePath, null, idFile, null);
+	},
+	moveFile: function (filePath, idFile, callback){
+		// Move file
+		var apiClient = this._createApiClient(this.pkey);
+		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
+		storageApi.MoveFile({
+			onResponse: function(response, status, jqXHR) {
+				callback(response.status == 'Ok', response);
+			},
+			onError: function(response, status, jqXHR) {
+				callback(false, response);
+			}
+		}, this.cid, filePath, null, null, idFile);
 	}
 };
