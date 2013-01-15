@@ -292,5 +292,15 @@ var GroupDocsManager = {
 				callback(response.status == 'Ok', response, response.error_message);
 			}
 		}, this.cid, fileId);
+	},
+	uploadFile: function (file, path, descr, callback){
+		// Upload file
+		var apiClient = this._createApiClient(this.pkey);
+		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
+		storageApi.Upload(function(response) {
+			if (typeof response == 'object'){
+				callback(response.status == 'Ok', response, response.error_message);
+			}
+		}, this.cid, path + file.name, descr, file);
 	}
 };

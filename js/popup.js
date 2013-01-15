@@ -55,10 +55,28 @@ var GroupDocsPlugin = {
 		$('#deleteBtn').click(function (){
 			GroupDocsPlugin.deleteDocument();
 		});
-		// Initial embed button
+		// Initialize embed button
 		$('#embedBtn').click(function (){
 			GroupDocsPlugin.embedDocument();
 		});
+		// Initialize file upload button
+		$('#fileUploadBtn').click(function (){
+			GroupDocsPlugin.uploadDocument();
+		});
+		// Initialize default text functional
+	    $(".default-text").focus(function(srcc){
+			if ($(this).val() == $(this)[0].title){
+				$(this).removeClass('default-text-active');
+				$(this).val('');
+			}
+		});
+		$('.default-text').blur(function(){
+			if ($(this).val() == ''){
+				$(this).addClass('default-text-active');
+				$(this).val($(this)[0].title);
+			}
+		});
+		$('.default-text').blur(); 
 	},
 	onLogout: function (){
 		// Logout function
@@ -286,5 +304,28 @@ var GroupDocsPlugin = {
 	embedDocument: function (){
 		var selectedDiv = $('#filesTree').find('div.selected');
 		EmbedDialog.show(selectedDiv.attr('id'));
+	},
+	uploadDocument: function (){
+		var file = $('#fileUpload')[0].files[0];
+		if (file === undefined){
+			StatusManager.err('uploadFileStatus', 'Please, select file to upload');
+			return;
+		}
+		var path = $('#uploadPath').val();
+		path = (path == $('#uploadPath').attr('title')) ? '' : path;
+		path = (path[path.length - 1] == '/' || path[path.length - 1] == '\\') ? path : path + '/';
+		path = (path[0] == '/' || path[0] == '\\') ? path.substr(1) : path;
+		var descr = $('#fileDescr').val();
+		descr = (descr == $('#fileDescr').attr('title')) ? '' : descr;
+		StatusManager.inf('uploadFileStatus', 'Start file upload');
+		GroupDocsManager.uploadFile(file, path, descr, function (success, responce, error_message){
+    		if (success){
+    			GroupDocsPlugin.contentShowed();
+    			StatusManager.scs('uploadFileStatus', 'File uploaded');
+    		}
+    		else {
+    			StatusManager.err('uploadFileStatus', error_message);
+    		}
+		});
 	}
 };

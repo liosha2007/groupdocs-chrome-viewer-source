@@ -190,3 +190,10 @@
 	height: 150px;
 }
 
+.default-text {
+	color: black;
+}
+
+.default-text-active {
+	color: #a1a1a1; font-style: italic;
+}
