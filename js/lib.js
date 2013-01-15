@@ -121,6 +121,70 @@ var StatusManager = {
 	}
 };
 
+// Generate code for embed document
+var EmbedDialog = {
+	generateButtonMessage: 'Generate',
+	closeButtonMessage: 'Close',
+	html: null,
+	dialogId: 'embedDialog',
+	fileid: '',
+	show: function (fileId){
+        // Show dialog
+		this.fileId = fileId;
+        this.html = {};
+        this.html.dialogDiv = $('<div />', { 'id': this.dialogId, 'class': 'embed-dialog-root-div' });
+        this.html.dialogContentDiv = $('<div />', { 'id': this.dialogId + '-content', 'class': 'embed-dialog-content-div' });
+        this.html.dialogButtonBlockDiv = $('<div />', { 'class': 'embed-dialog-button-block' });
+        this.html.embedButton = $('<input />', { 'type': 'button', 'id': this.dialogId + '-ok-button', 'class': 'embed-dialog-button-ok', 'value': this.generateButtonMessage });
+        this.html.closeButton = $('<input />', { 'type': 'button', 'id': this.dialogId + '-cancel-button', 'class': 'embed-dialog-button-cancel', 'value': this.closeButtonMessage });
+        
+        this.html.dialogDiv.append(this.html.dialogContentDiv);
+        this.html.dialogDiv.append(this.html.dialogButtonBlockDiv);
+        this.html.dialogButtonBlockDiv.append(this.html.embedButton);
+        this.html.dialogButtonBlockDiv.append(this.html.closeButton);
+        this.html.embedButton.click(function (){ EmbedDialog.onGenerate(); });
+        this.html.closeButton.click(function (){ EmbedDialog.onClose(); });
+
+        this.html.dialogContentDiv.append($('<label />', { 'for': 'widthId', 'class': 'embed-dialog-item' }).append($('<input />', { 'type': 'text', 'id': 'widthId', 'class': 'embed-dialog-width', 'value': '600' })).append('Frame width'));
+        this.html.dialogContentDiv.append($('<label />', { 'for': 'heightId', 'class': 'embed-dialog-item' }).append($('<input />', { 'type': 'text', 'id': 'heightId', 'class': 'embed-dialog-height', 'value': '800' })).append('Frame height'));
+        
+        this.html.dialogContentDiv.append($('<label />', { 'for': 'qualityId', 'class': 'embed-dialog-item' }).append($('<select />', { 'id': 'qualityId'})
+    		.append($('<option />', { 'value': '10', 'text': '10' }))
+    		.append($('<option />', { 'value': '20', 'text': '20' }))
+    		.append($('<option />', { 'value': '30', 'text': '30' }))
+    		.append($('<option />', { 'value': '40', 'text': '40' }))
+    		.append($('<option />', { 'value': '50', 'text': '50', 'selected': 'selected' }))
+    		.append($('<option />', { 'value': '60', 'text': '60' }))
+    		.append($('<option />', { 'value': '70', 'text': '70' }))
+    		.append($('<option />', { 'value': '80', 'text': '80' }))
+    		.append($('<option />', { 'value': '90', 'text': '90' }))
+    		.append($('<option />', { 'value': '100', 'text': '100' }))
+		).append('Quality'));
+
+        this.html.dialogContentDiv.append($('<label />', { 'for': 'selectionId', 'class': 'embed-dialog-item' }).append($('<input />', { 'type': 'checkbox', 'id': 'selectionId'})).append('Text selection'));
+        this.html.dialogContentDiv.append($('<label />', { 'for': 'downloadId', 'class': 'embed-dialog-item' }).append($('<input />', { 'type': 'checkbox', 'id': 'downloadId'})).append('Allow download'));
+        this.html.dialogContentDiv.append($('<label />', { 'for': 'printId', 'class': 'embed-dialog-item' }).append($('<input />', { 'type': 'checkbox', 'id': 'printId'})).append('Allow print'));
+        this.html.dialogContentDiv.append($('<textarea />', { 'id': 'embedDialogTextarea', 'class': 'embed-dialog-textarea' }));
+        
+        this.html.dialogDiv.appendTo('body');
+        this.onGenerate();
+	},
+	hide: function (){
+        // Hide dialog
+        if (this.html != null && this.html.dialogDiv !== undefined){
+            this.html.dialogDiv.remove();
+            this.html = null;
+        }
+	},
+	onGenerate: function (){
+		var tarea = $('#embedDialogTextarea');
+		tarea.html('<iframe src="http://dev-apps.groupdocs.com/document-viewer/Embed/' + this.fileId + '?quality=' + $('#qualityId option:selected').val() + '&use_pdf=' + $('#selectionId').is(':checked') + '&download=' + $('#downloadId').is(':checked') + '&print=' + $('#printId').is(':checked') + '" frameborder="0" width="' + $('#widthId').val() + '" height="' + $('#heightId').val() + '"></iframe>');
+	},
+	onClose: function (){
+		this.hide();
+	}
+};
+
 // GroupDocs manager
 var GroupDocsManager = {
 	cid: '',

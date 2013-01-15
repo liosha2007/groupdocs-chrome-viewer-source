@@ -150,4 +150,43 @@
 	color: green;
 }
 
+.embed-dialog-root-div {
+	position: absolute;
+	left: 100px;
+	top: 100px;
+	right: 100px;
+	bottom: 165px;
+	border: 1px solid black;
+	background: white;
+}
+
+.embed-dialog-button-block {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+}
+
+.embed-dialog-button-ok,.embed-dialog-button-cancel {
+	width: 50%;
+	height: 25px;
+}
+
+.embed-dialog-content-div {
+	padding: 10px;
+}
+
+.embed-dialog-item {
+	display: block;
+	width: 100%;
+}
+
+.embed-dialog-width, .embed-dialog-height {
+	width: 50px;
+	margin-right: 2px;
+}
+
+.embed-dialog-textarea {
+	width: 100%;
+	height: 150px;
+}
 

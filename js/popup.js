@@ -55,6 +55,10 @@ var GroupDocsPlugin = {
 		$('#deleteBtn').click(function (){
 			GroupDocsPlugin.deleteDocument();
 		});
+		// Initial embed button
+		$('#embedBtn').click(function (){
+			GroupDocsPlugin.embedDocument();
+		});
 	},
 	onLogout: function (){
 		// Logout function
@@ -145,14 +149,14 @@ var GroupDocsPlugin = {
 		$('#filesTree').find('div.selected').removeClass('selected');
 		$(this).addClass('selected');
 		$('#fileId').val('');
-		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn').attr('disabled', 'disabled');
+		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn, #embedBtn').attr('disabled', 'disabled');
 	},
 	onFile: function (){
 		// File selected
 		$('#filesTree').find('div.selected').removeClass('selected');
 		$(this).addClass('selected');
 		$('#fileId').val($(this).attr('id'));
-		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn').removeAttr('disabled');
+		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn, #embedBtn').removeAttr('disabled');
 	},
 	onShowDocument: function (){
 		// Show document
@@ -214,6 +218,7 @@ var GroupDocsPlugin = {
 		$('#filesTree').find('#' + $('#fileId').val()).click();
 	},
 	copyDocument: function (){
+		// Copy button clicked
 		var selectedDiv = $('#filesTree').find('div.selected');
 		var fileName = selectedDiv.html();
 		DirectoryChoicer.show();
@@ -238,6 +243,7 @@ var GroupDocsPlugin = {
 		}
 	},
 	moveDocument: function (){
+		// Move button clicked
 		var selectedDiv = $('#filesTree').find('div.selected');
 		var fileName = selectedDiv.html();
 		DirectoryChoicer.show();
@@ -262,6 +268,7 @@ var GroupDocsPlugin = {
 		}
 	},
 	deleteDocument: function (){
+		// Delete button clicked
 		var selectedDiv = $('#filesTree').find('div.selected');
 		var fileName = selectedDiv.html();
 		if (confirm('Delete file "' + fileName + '"?')){
@@ -275,5 +282,9 @@ var GroupDocsPlugin = {
         		}
 			});
 		}
+	},
+	embedDocument: function (){
+		var selectedDiv = $('#filesTree').find('div.selected');
+		EmbedDialog.show(selectedDiv.attr('id'));
 	}
 };
