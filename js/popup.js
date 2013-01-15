@@ -43,6 +43,10 @@ var GroupDocsPlugin = {
 		$('#findId').click(function (){
 			GroupDocsPlugin.findDocument();
 		});
+		// Initialize copy button
+		$('#copyBtn').click(function (){
+			GroupDocsPlugin.copyDocument();
+		});
 	},
 	onLogout: function (){
 		// Logout function
@@ -98,7 +102,7 @@ var GroupDocsPlugin = {
 		this.contentShowed();
 	},
 	contentShowed: function (){
-		$('#filesTree').val('');
+		$('#filesTree').html('');
 		this.showEntities('', $('#filesTree'));
 	},
 	showEntities: function (path, parent){
@@ -169,9 +173,9 @@ var GroupDocsPlugin = {
                 editableDiv.removeAttr('contenteditable');
                 GroupDocsManager.getDocumentMetadata($(editableDiv).attr('id'), function (docMetadata){
                 	if (docMetadata.id !== undefined){
-	                	GroupDocsManager.moveFile(path + newName, docMetadata.id, function (success, responce){
+	                	GroupDocsManager.renameFile(path + newName, docMetadata.id, function (success, responce){
 	                		if (success){
-		                		alert(success);
+		                		//alert(success);
 	                		}
 	                		else {
 	                    		$(editableDiv).html(oldName);
@@ -184,10 +188,36 @@ var GroupDocsPlugin = {
                 });
                 return false;
             });
-		}
+            editableDiv.keydown(function (e){
+            	if(e.keyCode == 13) {
+            		$(editableDiv).blur();
+            	}
+            });
+        }
 	},
 	findDocument: function (){
 		$('#filesTree').find('div.selected').removeClass('selected');
 		$('#filesTree').find('#' + $('#fileId').val()).click();
+	},
+	copyDocument: function (){
+		var selectedDiv = $('#filesTree').find('div.selected');
+		var fileName = selectedDiv.html();
+		DirectoryChoicer.show();
+		DirectoryChoicer.okButtonClick = function (){
+			DirectoryChoicer.hide();
+			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (docMetadata){
+				if (docMetadata.id !== undefined){
+					GroupDocsManager.copyFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce){
+                		if (success){
+                			GroupDocsPlugin.contentShowed();
+	                		//alert(success);
+                		}
+                		else {
+                    		//
+                		}
+                	});
+				}
+			});
+		}
 	}
 };

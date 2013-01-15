@@ -99,7 +99,7 @@ var GroupDocsManager = {
 		var apiClient = this._createApiClient(this.pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.ListEntities(function(response, status, jqXHR) {
-			if (status.status == 200){
+			if (response.status == 'Ok'){
 				callback(response.result.folders, response.result.files);
 			}
 		}, GroupDocsManager.cid, path);
@@ -120,17 +120,30 @@ var GroupDocsManager = {
 			callback(response.result);
 		}, this.cid, fileId);
 	},
-	moveFile: function (filePath, idFile, callback){
+	renameFile: function (filePath, idFile, callback){
 		// Move file
 		var apiClient = this._createApiClient(this.pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.MoveFile({
 			onResponse: function(response, status, jqXHR) {
-				callback(status.status == 200, response);
+				callback(response.status == 'Ok', response);
 			},
 			onError: function(response, status, jqXHR) {
 				callback(false, response);
 			}
 		}, this.cid, filePath, null, null, idFile);
+	},
+	copyFile: function (filePath, idFile, callback){
+		// Move file
+		var apiClient = this._createApiClient(this.pkey);
+		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
+		storageApi.MoveFile({
+			onResponse: function(response, status, jqXHR) {
+				callback(response.status == 'Ok', response);
+			},
+			onError: function(response, status, jqXHR) {
+				callback(false, response);
+			}
+		}, this.cid, filePath, null, idFile, null);
 	}
 };
