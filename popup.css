@@ -1,0 +1,123 @@
+.left-td {
+	text-align: right;
+}
+
+.right-td {
+	text-align: left;
+}
+
+.left-td,.right-td {
+	padding: 3px;
+	width: 50%;
+}
+
+.auth-error-msg {
+	text-align: center;
+	color: red;
+}
+
+.fileid-td {
+	text-align: left;
+	padding-left: 3px;
+}
+
+.logout-td {
+	text-align: right;
+}
+
+.tabs {
+	display: inline-block;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tab {
+	border-color: gray;
+	border-style: solid;
+	border-width: 1px 1px 0 1px;
+	display: inline-block;
+	padding-left: 2px;
+	width: 100px;
+}
+
+.logout-td {
+	text-align: right;
+	padding-right: 3px;
+	font-size: 12px;
+}
+
+.top-table {
+	margin: 3px;
+}
+
+.file-id {
+	width: 300px;
+}
+
+.list-files-control-td {
+	width: 150px;
+}
+
+.control-input {
+	display: block;
+	width: 100%;
+}
+
+.selected {
+	background-color: yellow;
+	margin-right: 5px;
+}
+
+.selected-tab {
+	background-color: gray;
+	color: white;
+}
+
+.tab,.file,.dir {
+	cursor: pointer;
+}
+
+.dir {
+	list-style-image: url('./img/directory.png');
+}
+
+.file {
+	list-style-image: url('./img/file.png');
+}
+
+.editable {
+	border: 1px solid gray;
+	cursor: text;
+}
+
+.dir-choicer-root-div {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	right: 10px;
+	bottom: 10px;
+	border: 1px solid black;
+	background: white;
+}
+
+.div-choicer-button-ok,.div-choicer-button-cancel {
+	width: 50%;
+	height: 25px;
+}
+
+.div-choicer-button-block {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+}
+
+.div-choicer-title-div {
+	font-size: 14px;
+	padding: 2px;
+}
+
+.files-tree {
+	height: 530px;
+	overflow: auto;
+}

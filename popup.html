@@ -1,0 +1,139 @@
+<html>
+    <head>
+    	<script type="text/javascript" src='./js/jquery-1.6.4.min.js'></script>
+    	<script type="text/javascript" src='./js/groupdocs-javascript-min.js'></script>
+    	<script type="text/javascript" src='./js/lib.js'></script>
+    	<script type="text/javascript" src='./js/popup.js'></script>
+        <link type="text/css" rel="stylesheet" media="all" href="./popup.css" />
+        <title>GroupDocs Viewer</title>
+    </head>
+    <body>
+        <table align="center" cellspacing="0" cellpadding="0" width="640" height="480" id="authTable">
+            <tr>
+                <td valign="middle">
+                    <table width="100%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td class="left-td">
+                                <label for="clientId">Client ID:</label>
+                            </td>
+                            <td class="right-td">
+                                <input type="text" name="clientId" id="clientId" value="5baf8f59c1ab4641" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left-td">
+                                <label for="privateKey">Private Key:</label>
+                            </td>
+                            <td class="right-td">
+                                <input type="text" name="privateKey" id="privateKey" value="18fa3edfa1f16f1d4ecfa798d3bb34da" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left-td">
+                                <input type="checkbox" id="rememberMe" checked />
+                            </td>
+                            <td class="right-td">
+                                <label for="rememberMe">Remember me</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left-td">
+                                
+                            </td>
+                            <td class="right-td">
+                                <input type="button" name="authFormBtn" id="authFormBtn" value="Login" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="authErrorMsg" class="auth-error-msg" style="display: none;">Please, enter correct values!</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table align="center" cellspacing="0" cellpadding="0" width="640" height="480" id="mainTable" style="display: none;">
+            <tr>
+                <td valign="top">
+                    <table cellspacing="0" cellpadding="0" width="100%" class="top-table">
+                        <tr>
+                            <td class="file-id-td">
+                                <label for="file-id">File ID: </label>
+                                <input type="text" id="fileId" class="file-id" />
+                                <input type="button" value="Find" id="findId" />
+                            </td>
+                            <td class="logout-td">
+                                <a href="#" id="logout">Logout</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <ul class="tabs">
+                        <li class="tab selected-tab" id="listFilesTab">
+                            List files
+                        </li>
+                        <li class="tab" id="showFileTab">
+                            Show file
+                        </li>
+                        <li class="tab" id="uploadFileTab">
+                            Upload file
+                        </li>
+                    </ul>
+                    
+                    <div id="listFilesBlock">
+                        <table cellspacing="0" cellpadding="0" width="100%" height="100%">
+                            <tr>
+                                <td>
+                                <div  id="filesTree" class="files-tree">
+                                &nbsp;
+                                </div>
+                                </td>
+                                <td class="list-files-control-td" valign="top">
+                                    <input type="button" value="Show" id="showBtn" class="control-input" disabled="disabled" />
+                                    <input type="button" value="Download" id="downloadBtn" class="control-input" disabled="disabled" />
+                                    <input type="button" value="Copy" id="copyBtn" class="control-input" disabled="disabled" />
+                                    <input type="button" value="Move" id="moveBtn" class="control-input" disabled="disabled" />
+                                    <input type="button" value="Rename" id="renameBtn" class="control-input" disabled="disabled" />
+                                    <iframe id="downloadFile" style="display:none"></iframe>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div id="showFileBlock" style="display: none;">
+                        <iframe src="" frameborder="0" width="640" height="530" id="previewFrame"></iframe>
+                    </div>
+                    
+                    <div id="uploadFileBlock" style="display: none;">
+                        <table cellspacing="0" cellpadding="0" width="100%" height="100%">
+                            <tr>
+                                <td class="left-td">
+                                    <label for="fileUpload">Select file for upload</label>
+                                </td>
+                                <td class="right-td">
+                                    <input type="file" id="fileUpload" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="left-td">
+                                    <label for="uploadPath">Ented path</label>
+                                </td>
+                                <td class="right-td">
+                                    <input type="text" id="uploadPath" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="left-td">
+                                    
+                                </td>
+                                <td class="right-td">
+                                    <input type="button" value="Upload" id="fileUploadBtn" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

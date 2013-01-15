@@ -1,0 +1,15 @@
+{
+    "name": "GroupDocs Viewer",
+    "version": "1.3",
+    "manifest_version": 2,
+    "description": "GroupDocs Viewer plugin for Google Chrome",
+    "browser_action": {
+    	"default_title": "GroupDocs Viewer",
+    	"default_icon": "./img/icon.gif",
+    	"default_popup": "popup.html"
+    },
+    "permissions": [
+    	"https://dev-api.groupdocs.com/*",
+    	"https://api.groupdocs.com/*"
+    ]
+}
