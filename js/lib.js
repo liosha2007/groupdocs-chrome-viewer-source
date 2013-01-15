@@ -107,10 +107,10 @@ var GroupDocsManager = {
 	downloadDocument: function (fileId, callback){
 		// Get download document url
 		var apiClient = this._createApiClient(this.pkey);
-		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
-		storageApi.GetFile(function(response) {
+		var storageApi = new groupdocs.SharedApi(apiClient, this.server);
+		storageApi.Download(function(response) {
 			callback(response);
-		}, this.cid, fileId);
+		}, fileId);
 	},
 	getDocumentMetadata: function (fileId, callback){
 		// Get Document metadata
@@ -158,5 +158,18 @@ var GroupDocsManager = {
 				callback(false, response);
 			}
 		}, this.cid, filePath, null, null, idFile);
+	},
+	deleteFile: function (fileId, callback){
+		// Delete file
+		var apiClient = this._createApiClient(this.pkey);
+		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
+		storageApi.Delete(function (response, status, jqXHR){
+			if (response.status == 'Ok'){
+				callback(true, '');
+			}
+			else {
+				callback(false, response.error_message);
+			}
+		}, this.cid, fileId);
 	}
 };

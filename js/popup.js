@@ -51,6 +51,10 @@ var GroupDocsPlugin = {
 		$('#moveBtn').click(function (){
 			GroupDocsPlugin.moveDocument();
 		});
+		// Initialize delete button
+		$('#deleteBtn').click(function (){
+			GroupDocsPlugin.deleteDocument();
+		});
 	},
 	onLogout: function (){
 		// Logout function
@@ -242,6 +246,21 @@ var GroupDocsPlugin = {
                 		}
                 	});
 				}
+			});
+		}
+	},
+	deleteDocument: function (){
+		var selectedDiv = $('#filesTree').find('div.selected');
+		var fileName = selectedDiv.html();
+		if (confirm('Delete file "' + fileName + '"?')){
+			GroupDocsManager.deleteFile(selectedDiv.attr('id'), function (success, errmsg){
+        		if (success){
+        			GroupDocsPlugin.contentShowed();
+            		//alert(success);
+        		}
+        		else {
+            		//
+        		}
 			});
 		}
 	}
