@@ -77,6 +77,10 @@ var GroupDocsPlugin = {
 			}
 		});
 		$('.default-text').blur(); 
+		// Initialize refresh button
+		$('#refreshBtn').click(function (){
+			GroupDocsPlugin.refreshDocumentList();
+		});
 	},
 	onLogout: function (){
 		// Logout function
@@ -327,5 +331,8 @@ var GroupDocsPlugin = {
     			StatusManager.err('uploadFileStatus', error_message);
     		}
 		});
+	},
+	refreshDocumentList: function (){
+		this.contentShowed();
 	}
 };
