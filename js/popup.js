@@ -114,25 +114,30 @@ var GroupDocsPlugin = {
 		this.showEntities('', $('#filesTree'));
 	},
 	showEntities: function (path, parent){
-		GroupDocsManager.listEntities(path, function (folders, files){
-    		var ul = $('<ul></ul>');
-    		for (var n = 0; n < folders.length; n++){
-    			var li = $('<li class="dir"></li>');
-    			var div = $('<div>' + folders[n].name + '</div>');
-    			div.click(GroupDocsPlugin.onFolder);
-    			li.append(div);
-    			GroupDocsPlugin.showEntities(path + folders[n].name + '/', li);
-    			ul.append(li);
-    		}
-    		for (var n = 0; n < files.length; n++){
-    			var li = $('<li class="file"></li>');
-    			var div = $('<div id="' + files[n].guid + '">' + files[n].name + '</div>');
-    			div.click(GroupDocsPlugin.onFile);
-    			li.append(div);
-    			GroupDocsPlugin.showEntities(path + files[n].name + '/', li);
-    			ul.append(li);
-    		}
-    		parent.append(ul);
+		GroupDocsManager.listEntities(path, function (success, folders, files, error_message){
+			if (success){
+	    		var ul = $('<ul></ul>');
+	    		for (var n = 0; n < folders.length; n++){
+	    			var li = $('<li class="dir"></li>');
+	    			var div = $('<div>' + folders[n].name + '</div>');
+	    			div.click(GroupDocsPlugin.onFolder);
+	    			li.append(div);
+	    			GroupDocsPlugin.showEntities(path + folders[n].name + '/', li);
+	    			ul.append(li);
+	    		}
+	    		for (var n = 0; n < files.length; n++){
+	    			var li = $('<li class="file"></li>');
+	    			var div = $('<div id="' + files[n].guid + '">' + files[n].name + '</div>');
+	    			div.click(GroupDocsPlugin.onFile);
+	    			li.append(div);
+	    			GroupDocsPlugin.showEntities(path + files[n].name + '/', li);
+	    			ul.append(li);
+	    		}
+	    		parent.append(ul);
+			}
+			else {
+				StatusManager.err('listFilesStatus', error_message);
+			}
     	});
 	},
 	onFolder: function (){
@@ -179,14 +184,15 @@ var GroupDocsPlugin = {
             	var newName = $(editableDiv).html();
                 editableDiv.removeClass('editable');
                 editableDiv.removeAttr('contenteditable');
-                GroupDocsManager.getDocumentMetadata($(editableDiv).attr('id'), function (docMetadata){
-                	if (docMetadata !== undefined && docMetadata.id !== undefined){
-	                	GroupDocsManager.renameFile(path + newName, docMetadata.id, function (success, responce){
+                GroupDocsManager.getDocumentMetadata($(editableDiv).attr('id'), function (success, docMetadata, error_message){
+                	if (success && docMetadata !== undefined && docMetadata.id !== undefined){
+	                	GroupDocsManager.renameFile(path + newName, docMetadata.id, function (success, responce, error_message){
 	                		if (success){
-		                		//alert(success);
+	                			StatusManager.scs('listFilesStatus', 'File renamed');
 	                		}
 	                		else {
 	                    		$(editableDiv).html(oldName);
+	                    		StatusManager.err('listFilesStatus', error_message);
 	                		}
 	                	});
                 	}
@@ -213,17 +219,20 @@ var GroupDocsPlugin = {
 		DirectoryChoicer.show();
 		DirectoryChoicer.okButtonClick = function (){
 			DirectoryChoicer.hide();
-			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (docMetadata){
-				if (docMetadata !== undefined && docMetadata.id !== undefined){
-					GroupDocsManager.copyFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce){
+			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (success, docMetadata, error_message){
+				if (success && docMetadata !== undefined && docMetadata.id !== undefined){
+					GroupDocsManager.copyFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce, error_message){
                 		if (success){
                 			GroupDocsPlugin.contentShowed();
-	                		//alert(success);
+                			StatusManager.scs('listFilesStatus', 'File copied');
                 		}
                 		else {
-                    		//
+                			StatusManager.err('listFilesStatus', error_message);
                 		}
                 	});
+				}
+				else {
+					StatusManager.err('listFilesStatus', error_message);
 				}
 			});
 		}
@@ -234,17 +243,20 @@ var GroupDocsPlugin = {
 		DirectoryChoicer.show();
 		DirectoryChoicer.okButtonClick = function (){
 			DirectoryChoicer.hide();
-			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (docMetadata){
-				if (docMetadata !== undefined && docMetadata.id !== undefined){
-					GroupDocsManager.moveFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce){
+			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (success, docMetadata, error_message){
+				if (success && docMetadata !== undefined && docMetadata.id !== undefined){
+					GroupDocsManager.moveFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce, error_message){
                 		if (success){
                 			GroupDocsPlugin.contentShowed();
-	                		//alert(success);
+                			StatusManager.scs('listFilesStatus', 'File moved');
                 		}
                 		else {
-                    		//
+                			StatusManager.err('listFilesStatus', error_message);
                 		}
                 	});
+				}
+				else {
+					StatusManager.err('listFilesStatus', error_message);
 				}
 			});
 		}
@@ -253,13 +265,13 @@ var GroupDocsPlugin = {
 		var selectedDiv = $('#filesTree').find('div.selected');
 		var fileName = selectedDiv.html();
 		if (confirm('Delete file "' + fileName + '"?')){
-			GroupDocsManager.deleteFile(selectedDiv.attr('id'), function (success, errmsg){
+			GroupDocsManager.deleteFile(selectedDiv.attr('id'), function (success, responce, error_message){
         		if (success){
         			GroupDocsPlugin.contentShowed();
-            		//alert(success);
+        			StatusManager.scs('listFilesStatus', 'File deleted');
         		}
         		else {
-            		//
+        			StatusManager.err('listFilesStatus', error_message);
         		}
 			});
 		}

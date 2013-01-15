@@ -96,7 +96,7 @@
 	left: 10px;
 	top: 10px;
 	right: 10px;
-	bottom: 10px;
+	bottom: 35px;
 	border: 1px solid black;
 	background: white;
 }
@@ -118,6 +118,36 @@
 }
 
 .files-tree {
-	height: 530px;
+	height: 504px;
+	margin-bottom: 5px;
 	overflow: auto;
+	border: 1px inset #DCDCDC;
 }
+
+.status-panel {
+	height: 20px;
+	border: 1px inset #DCDCDC;
+	font-size: 14px;
+}
+
+.upload-file-block {
+	height: 530px;
+}
+
+.status-err {
+	color: red;
+}
+
+.status-war {
+	color: yellow;
+}
+
+.status-inf {
+	color: black;
+}
+
+.status-scs {
+	color: green;
+}
+
+

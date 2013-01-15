@@ -98,6 +98,9 @@
                                     <iframe id="downloadFile" style="display:none"></iframe>
                                 </td>
                             </tr>
+                            <tr>
+                            	<td colspan="2" class="status-panel" id="listFilesStatus"></td>
+                            </tr>
                         </table>
                     </div>
                     
@@ -105,31 +108,40 @@
                         <iframe src="" frameborder="0" width="640" height="530" id="previewFrame"></iframe>
                     </div>
                     
-                    <div id="uploadFileBlock" style="display: none;">
+                    <div id="uploadFileBlock" class="upload-file-block" style="display: none;">
                         <table cellspacing="0" cellpadding="0" width="100%" height="100%">
                             <tr>
-                                <td class="left-td">
-                                    <label for="fileUpload">Select file for upload</label>
-                                </td>
-                                <td class="right-td">
-                                    <input type="file" id="fileUpload" />
+                                <td class="left-td" colspan="2">
+                                    <table cellspacing="0" cellpadding="0" width="100%">
+			                            <tr>
+			                                <td class="left-td">
+			                                    <label for="fileUpload">Select file for upload</label>
+			                                </td>
+			                                <td class="right-td">
+			                                    <input type="file" id="fileUpload" />
+			                                </td>
+			                            </tr>
+			                            <tr>
+			                                <td class="left-td">
+			                                    <label for="uploadPath">Ented path</label>
+			                                </td>
+			                                <td class="right-td">
+			                                    <input type="text" id="uploadPath" />
+			                                </td>
+			                            </tr>
+			                            <tr>
+			                                <td class="left-td">
+			                                    
+			                                </td>
+			                                <td class="right-td">
+			                                    <input type="button" value="Upload" id="fileUploadBtn" />
+			                                </td>
+			                            </tr>
+                                    </table>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="left-td">
-                                    <label for="uploadPath">Ented path</label>
-                                </td>
-                                <td class="right-td">
-                                    <input type="text" id="uploadPath" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="left-td">
-                                    
-                                </td>
-                                <td class="right-td">
-                                    <input type="button" value="Upload" id="fileUploadBtn" />
-                                </td>
+                            	<td colspan="2" class="status-panel" id="uploadFileStatus"></td>
                             </tr>
                         </table>
                     </div>

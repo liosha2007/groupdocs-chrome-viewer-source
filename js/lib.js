@@ -44,20 +44,25 @@ var DirectoryChoicer = {
     },
     showDirs: function (path, parent){
     	// Load elems by path to parent element
-    	GroupDocsManager.listEntities(path, function (folders, files){
-    		var ul = $('<ul></ul>');
-    		if (path.length == 0) {
-    			folders.reverse().push({ name: '.' }); folders.reverse();
+    	GroupDocsManager.listEntities(path, function (success, folders, files, error_message){
+    		if (success){
+	    		var ul = $('<ul></ul>');
+	    		if (path.length == 0) {
+	    			folders.reverse().push({ name: '.' }); folders.reverse();
+	    		}
+	    		for (var n = 0; n < folders.length; n++){
+	    			var li = $('<li class="dir"></li>');
+	    			var div = $('<div>' + folders[n].name + '</div>');
+	    			div.click(DirectoryChoicer.onFolder);
+	    			li.append(div);
+	    			DirectoryChoicer.showDirs(path + folders[n].name + '/', li);
+	    			ul.append(li);
+	    		}
+	    		parent.append(ul);
     		}
-    		for (var n = 0; n < folders.length; n++){
-    			var li = $('<li class="dir"></li>');
-    			var div = $('<div>' + folders[n].name + '</div>');
-    			div.click(DirectoryChoicer.onFolder);
-    			li.append(div);
-    			DirectoryChoicer.showDirs(path + folders[n].name + '/', li);
-    			ul.append(li);
+    		else{
+    			StatusManager.err('listFilesStatus', error_message);
     		}
-    		parent.append(ul);
     	});
     },
     onFolder: function (){
@@ -77,6 +82,45 @@ var DirectoryChoicer = {
     }
 };
 
+// Status manager
+var StatusManager = {
+	timeout: null,
+	err: function (statusElemId, message){
+		// Error message
+		this.stopTimer();
+		$('#' + statusElemId).addClass('status-err').html('Error: ' + message);
+		this.startTimer(statusElemId);
+	},
+	war: function (statusElemId, message){
+		// Warning message
+		this.stopTimer();
+		$('#' + statusElemId).addClass('status-war').html('Warning: ' + message);
+		this.startTimer(statusElemId);
+	},
+	inf: function (statusElemId, message){
+		// Info message
+		this.stopTimer();
+		$('#' + statusElemId).addClass('status-inf').html('Info: ' + message);
+		this.startTimer(statusElemId);
+	},
+	scs: function (statusElemId, message){
+		// Success message
+		this.stopTimer();
+		$('#' + statusElemId).addClass('status-scs').html('Success: ' + message);
+		this.startTimer(statusElemId);
+	},
+	startTimer: function (statusElemId){
+		setTimeout(function (){
+			$('#' + statusElemId).html('');
+		}, 5000);
+	},
+	stopTimer: function (){
+		if (this.timeout != null){
+			clearTimeout(this.timeout);
+		}
+	}
+};
+
 // GroupDocs manager
 var GroupDocsManager = {
 	cid: '',
@@ -91,7 +135,9 @@ var GroupDocsManager = {
 		var apiClient = this._createApiClient(pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.GetStorageInfo(function(response) {
-			callback(response.status == "Ok");
+			if (typeof response == 'object'){
+				callback(response.status == "Ok");
+			}
 		}, cid);
 	},
 	listEntities: function (path, callback){
@@ -99,8 +145,8 @@ var GroupDocsManager = {
 		var apiClient = this._createApiClient(this.pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.ListEntities(function(response, status, jqXHR) {
-			if (response.status == 'Ok'){
-				callback(response.result.folders, response.result.files);
+			if (typeof response == 'object'){
+				callback(response.status == 'Ok', response.result.folders, response.result.files, response.error_message);
 			}
 		}, GroupDocsManager.cid, path);
 	},
@@ -117,7 +163,9 @@ var GroupDocsManager = {
 		var apiClient = this._createApiClient(this.pkey);
 		var docApi = new groupdocs.DocApi(apiClient, this.server);
 		docApi.GetDocumentMetadata(function (response, status, jqXHR){
-			callback(response.result);
+			if (typeof response == 'object'){
+				callback(response.status == 'Ok', response.result, response.error_message);
+			}
 		}, this.cid, fileId);
 	},
 	renameFile: function (filePath, idFile, callback){
@@ -126,10 +174,14 @@ var GroupDocsManager = {
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.MoveFile({
 			onResponse: function(response, status, jqXHR) {
-				callback(response.status == 'Ok', response);
+				if (typeof response == 'object'){
+					callback(response.status == 'Ok', response, response.error_message);
+				}
 			},
 			onError: function(response, status, jqXHR) {
-				callback(false, response);
+				if (typeof response == 'object'){
+					callback(response.status == 'Ok', response, response.error_message);
+				}
 			}
 		}, this.cid, filePath, null, null, idFile);
 	},
@@ -139,10 +191,14 @@ var GroupDocsManager = {
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.MoveFile({
 			onResponse: function(response, status, jqXHR) {
-				callback(response.status == 'Ok', response);
+				if (typeof response == 'object'){
+					callback(response.status == 'Ok', response, response.error_message);
+				}
 			},
 			onError: function(response, status, jqXHR) {
-				callback(false, response);
+				if (typeof response == 'object'){
+					callback(response.status == 'Ok', response, response.error_message);
+				}
 			}
 		}, this.cid, filePath, null, idFile, null);
 	},
@@ -152,10 +208,14 @@ var GroupDocsManager = {
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.MoveFile({
 			onResponse: function(response, status, jqXHR) {
-				callback(response.status == 'Ok', response);
+				if (typeof response == 'object'){
+					callback(response.status == 'Ok', response, response.error_message);
+				}
 			},
 			onError: function(response, status, jqXHR) {
-				callback(false, response);
+				if (typeof response == 'object'){
+					callback(response.status == 'Ok', response, response.error_message);
+				}
 			}
 		}, this.cid, filePath, null, null, idFile);
 	},
@@ -164,11 +224,8 @@ var GroupDocsManager = {
 		var apiClient = this._createApiClient(this.pkey);
 		var storageApi = new groupdocs.StorageApi(apiClient, this.server);
 		storageApi.Delete(function (response, status, jqXHR){
-			if (response.status == 'Ok'){
-				callback(true, '');
-			}
-			else {
-				callback(false, response.error_message);
+			if (typeof response == 'object'){
+				callback(response.status == 'Ok', response, response.error_message);
 			}
 		}, this.cid, fileId);
 	}
