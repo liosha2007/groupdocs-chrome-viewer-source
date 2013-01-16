@@ -4,6 +4,7 @@ jQuery(function (){
 });
 // main object
 var GroupDocsPlugin = {
+	filesCount: 0,
 	initialize: function (){
 		// Initialize plugin
 		this._initializeEvents();
@@ -109,11 +110,13 @@ var GroupDocsPlugin = {
 	},
 	onAuth: function (){
 		// Auth button clicked
+		StatusManager.showProgress();
 		var cid = $('#clientId').val();
 		var pkey = $('#privateKey').val();
 		$('#authErrorMsg').hide();
 		$('#authFormBtn').attr('disabled', 'disabled');
 		GroupDocsManager.isCorrectCredentials(cid, pkey, function (isCorrect){
+			StatusManager.hideProgress();
 			$('#authFormBtn').removeAttr('disabled');
 			if (isCorrect === true){
 				if ($('#rememberMe').is(':checked')){
@@ -140,7 +143,10 @@ var GroupDocsPlugin = {
 		this.showEntities('', $('#filesTree'));
 	},
 	showEntities: function (path, parent){
+		GroupDocsPlugin.filesCount += 1;
+		StatusManager.showProgress();
 		GroupDocsManager.listEntities(path, function (success, folders, files, error_message){
+			GroupDocsPlugin.filesCount -= 1;
 			if (success){
 	    		var ul = $('<ul></ul>');
 	    		for (var n = 0; n < folders.length; n++){
@@ -163,6 +169,9 @@ var GroupDocsPlugin = {
 			}
 			else {
 				StatusManager.err('listFilesStatus', error_message);
+			}
+			if (GroupDocsPlugin.filesCount == 0) {
+				StatusManager.hideProgress();
 			}
     	});
 	},
@@ -207,12 +216,14 @@ var GroupDocsPlugin = {
             editableDiv.attr('contenteditable', true);
             editableDiv.focus();
             editableDiv.blur(function (){
+            	StatusManager.showProgress();
             	var newName = $(editableDiv).html();
                 editableDiv.removeClass('editable');
                 editableDiv.removeAttr('contenteditable');
                 GroupDocsManager.getDocumentMetadata($(editableDiv).attr('id'), function (success, docMetadata, error_message){
                 	if (success && docMetadata !== undefined && docMetadata.id !== undefined){
 	                	GroupDocsManager.renameFile(path + newName, docMetadata.id, function (success, responce, error_message){
+	                		StatusManager.hideProgress();
 	                		if (success){
 	                			StatusManager.scs('listFilesStatus', 'File renamed');
 	                		}
@@ -224,6 +235,8 @@ var GroupDocsPlugin = {
                 	}
                 	else {
                 		$(editableDiv).html(oldName);
+                		StatusManager.err('listFilesStatus', error_message);
+                		StatusManager.hideProgress();
                 	}
                 });
                 return false;
@@ -246,9 +259,11 @@ var GroupDocsPlugin = {
 		DirectoryChoicer.show();
 		DirectoryChoicer.okButtonClick = function (){
 			DirectoryChoicer.hide();
+			StatusManager.showProgress();
 			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (success, docMetadata, error_message){
 				if (success && docMetadata !== undefined && docMetadata.id !== undefined){
 					GroupDocsManager.copyFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce, error_message){
+						StatusManager.hideProgress();
                 		if (success){
                 			GroupDocsPlugin.contentShowed();
                 			StatusManager.scs('listFilesStatus', 'File copied');
@@ -260,6 +275,7 @@ var GroupDocsPlugin = {
 				}
 				else {
 					StatusManager.err('listFilesStatus', error_message);
+					StatusManager.hideProgress();
 				}
 			});
 		}
@@ -271,9 +287,11 @@ var GroupDocsPlugin = {
 		DirectoryChoicer.show();
 		DirectoryChoicer.okButtonClick = function (){
 			DirectoryChoicer.hide();
+			StatusManager.showProgress();
 			GroupDocsManager.getDocumentMetadata(selectedDiv.attr('id'), function (success, docMetadata, error_message){
 				if (success && docMetadata !== undefined && docMetadata.id !== undefined){
 					GroupDocsManager.moveFile(DirectoryChoicer.selected + fileName, docMetadata.id, function (success, responce, error_message){
+						StatusManager.hideProgress();
                 		if (success){
                 			GroupDocsPlugin.contentShowed();
                 			StatusManager.scs('listFilesStatus', 'File moved');
@@ -285,6 +303,7 @@ var GroupDocsPlugin = {
 				}
 				else {
 					StatusManager.err('listFilesStatus', error_message);
+					StatusManager.hideProgress();
 				}
 			});
 		}
@@ -294,7 +313,9 @@ var GroupDocsPlugin = {
 		var selectedDiv = $('#filesTree').find('div.selected');
 		var fileName = selectedDiv.html();
 		if (confirm('Delete file "' + fileName + '"?')){
+			StatusManager.showProgress();
 			GroupDocsManager.deleteFile(selectedDiv.attr('id'), function (success, responce, error_message){
+				StatusManager.hideProgress();
         		if (success){
         			GroupDocsPlugin.contentShowed();
         			StatusManager.scs('listFilesStatus', 'File deleted');
@@ -310,11 +331,13 @@ var GroupDocsPlugin = {
 		EmbedDialog.show(selectedDiv.attr('id'));
 	},
 	uploadDocument: function (){
+		// Upload file button clicked
 		var file = $('#fileUpload')[0].files[0];
 		if (file === undefined){
 			StatusManager.err('uploadFileStatus', 'Please, select file to upload');
 			return;
 		}
+		StatusManager.showProgress();
 		var path = $('#uploadPath').val();
 		path = (path == $('#uploadPath').attr('title')) ? '' : path;
 		path = (path[path.length - 1] == '/' || path[path.length - 1] == '\\') ? path : path + '/';
@@ -323,6 +346,7 @@ var GroupDocsPlugin = {
 		descr = (descr == $('#fileDescr').attr('title')) ? '' : descr;
 		StatusManager.inf('uploadFileStatus', 'Start file upload');
 		GroupDocsManager.uploadFile(file, path, descr, function (success, responce, error_message){
+			StatusManager.hideProgress();
     		if (success){
     			GroupDocsPlugin.contentShowed();
     			StatusManager.scs('uploadFileStatus', 'File uploaded');

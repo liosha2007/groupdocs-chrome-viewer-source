@@ -85,6 +85,8 @@ var DirectoryChoicer = {
 // Status manager
 var StatusManager = {
 	timeout: null,
+	progress: null,
+	progressId: 'inProgress',
 	err: function (statusElemId, message){
 		// Error message
 		this.stopTimer();
@@ -118,6 +120,16 @@ var StatusManager = {
 		if (this.timeout != null){
 			clearTimeout(this.timeout);
 		}
+	},
+	showProgress: function (){
+		$('body').find('#' + this.progressId).remove();
+		this.progress = $('<div />', { 'id': this.progressId, 'class': 'in-progress-div' }).appendTo('body');
+		this.progress.append($('<div />', { 'class': 'in-progress-vertical' }).append($('<div />', { 'class': 'in-progress-horizontal' }).append($('<img />', { 'src': './img/progress.gif', 'class': 'in-progress-image', 'width': '100px', 'height': '100px' }))));
+	},
+	hideProgress: function (){
+		if (this.progress != null){
+			this.progress.remove();
+		}
 	}
 };
 
@@ -130,6 +142,7 @@ var EmbedDialog = {
 	fileid: '',
 	show: function (fileId){
         // Show dialog
+		StatusManager.showProgress();
 		this.fileId = fileId;
         this.html = {};
         this.html.dialogDiv = $('<div />', { 'id': this.dialogId, 'class': 'embed-dialog-root-div' });
@@ -175,6 +188,7 @@ var EmbedDialog = {
             this.html.dialogDiv.remove();
             this.html = null;
         }
+        StatusManager.hideProgress();
 	},
 	onGenerate: function (){
 		var tarea = $('#embedDialogTextarea');
