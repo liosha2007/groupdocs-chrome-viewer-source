@@ -17,52 +17,64 @@ var GroupDocsPlugin = {
 		// Initialize logout button
 		$('#logout').click(function (){
 			GroupDocsPlugin.onLogout();
+			return false;
 		});
 		// Initialize tab switching
 		$('.tab').each(function (index, elem){
 	        $(elem).click(function (elem){
-	        	GroupDocsPlugin.onTabSwitch(elem.srcElement);
+	        	GroupDocsPlugin.onTabSwitch((elem.srcElement === undefined) ? elem.target : elem.srcElement);
+				return false;
 	        });
 	    });
 		// Initialize auth button
 		$('#authFormBtn').click(function (){
 			GroupDocsPlugin.onAuth();
+			return false;
 		});
 		// Initialize show button
 		$('#showBtn').click(function (){
 			GroupDocsPlugin.onShowDocument();
+			return false;
 		});
 		// Initialize download button
 		$('#downloadBtn').click(function (){
 			GroupDocsPlugin.onDownloadDocument();
+			return false;
 		});
 		// Initialize rename button
 		$('#renameBtn').click(function (){
 			GroupDocsPlugin.onRenameDocument();
+			return false;
 		});
 		// Initialize find button
 		$('#findId').click(function (){
 			GroupDocsPlugin.findDocument();
+			return false;
 		});
 		// Initialize copy button
 		$('#copyBtn').click(function (){
 			GroupDocsPlugin.copyDocument();
+			return false;
 		});
 		// Initialize move buttin
 		$('#moveBtn').click(function (){
 			GroupDocsPlugin.moveDocument();
+			return false;
 		});
 		// Initialize delete button
 		$('#deleteBtn').click(function (){
 			GroupDocsPlugin.deleteDocument();
+			return false;
 		});
 		// Initialize embed button
 		$('#embedBtn').click(function (){
 			GroupDocsPlugin.embedDocument();
+			return false;
 		});
 		// Initialize file upload button
 		$('#fileUploadBtn').click(function (){
 			GroupDocsPlugin.uploadDocument();
+			return false;
 		});
 		// Initialize default text functional
 	    $(".default-text").focus(function(srcc){
@@ -81,6 +93,7 @@ var GroupDocsPlugin = {
 		// Initialize refresh button
 		$('#refreshBtn').click(function (){
 			GroupDocsPlugin.refreshDocumentList();
+			return false;
 		});
 	},
 	onLogout: function (){
@@ -231,6 +244,7 @@ var GroupDocsPlugin = {
 	                    		$(editableDiv).html(oldName);
 	                    		StatusManager.err('listFilesStatus', error_message);
 	                		}
+	                		GroupDocsPlugin.contentShowed();
 	                	});
                 	}
                 	else {
@@ -340,8 +354,10 @@ var GroupDocsPlugin = {
 		StatusManager.showProgress();
 		var path = $('#uploadPath').val();
 		path = (path == $('#uploadPath').attr('title')) ? '' : path;
-		path = (path[path.length - 1] == '/' || path[path.length - 1] == '\\') ? path : path + '/';
-		path = (path[0] == '/' || path[0] == '\\') ? path.substr(1) : path;
+		if (path.length > 0){
+			path = (path[path.length - 1] == '/' || path[path.length - 1] == '\\') ? path : path + '/';
+			path = (path[0] == '/' || path[0] == '\\') ? path.substr(1) : path;
+		}
 		var descr = $('#fileDescr').val();
 		descr = (descr == $('#fileDescr').attr('title')) ? '' : descr;
 		StatusManager.inf('uploadFileStatus', 'Start file upload');

@@ -8,24 +8,26 @@ var DirectoryChoicer = {
     selected: null,
     html: null,
     show: function (){
-        // Show dialog
-        this.html = {};
-        this.html.dialogDiv = $('<div id="' + this.dialogId + '" class="dir-choicer-root-div"></div>');
-        this.html.dialogTitleDiv = $('<div class="div-choicer-title-div">' + this.titleMessage + '</div>');
-        this.html.dialogContentDiv = $('<div id="' + this.dialogId + '-content"></div>');
-        this.html.dialogButtonBlockDiv = $('<div class="div-choicer-button-block"></div>');
-        this.html.okButton = $('<input type="button" id="' + this.dialogId + '-ok-button" class="div-choicer-button-ok" value="' + this.okButtonMessage + '" />');
-        this.html.cancelButton = $('<input type="button" id="' + this.dialogId + '-cancel-button" class="div-choicer-button-cancel" value="' + this.cancelButtonMessage + '" />');
-        
-        this.html.dialogDiv.append(this.html.dialogTitleDiv);
-        this.html.dialogDiv.append(this.html.dialogContentDiv);
-        this.html.dialogDiv.append(this.html.dialogButtonBlockDiv);
-        this.html.dialogButtonBlockDiv.append(this.html.okButton);
-        this.html.dialogButtonBlockDiv.append(this.html.cancelButton);
-        this.html.okButton.click(function (){ DirectoryChoicer.okButtonClick(); });
-        this.html.cancelButton.click(function (){ DirectoryChoicer.cancelButtonClick(); });
-        this.html.dialogDiv.appendTo('body');
-        this.showDirs('', this.html.dialogContentDiv);
+    	if (this.html == null){
+	        // Show dialog
+	        this.html = {};
+	        this.html.dialogDiv = $('<div id="' + this.dialogId + '" class="dir-choicer-root-div"></div>');
+	        this.html.dialogTitleDiv = $('<div class="div-choicer-title-div">' + this.titleMessage + '</div>');
+	        this.html.dialogContentDiv = $('<div id="' + this.dialogId + '-content"></div>');
+	        this.html.dialogButtonBlockDiv = $('<div class="div-choicer-button-block"></div>');
+	        this.html.okButton = $('<input type="button" id="' + this.dialogId + '-ok-button" class="div-choicer-button-ok" value="' + this.okButtonMessage + '" />');
+	        this.html.cancelButton = $('<input type="button" id="' + this.dialogId + '-cancel-button" class="div-choicer-button-cancel" value="' + this.cancelButtonMessage + '" />');
+	        
+	        this.html.dialogDiv.append(this.html.dialogTitleDiv);
+	        this.html.dialogDiv.append(this.html.dialogContentDiv);
+	        this.html.dialogDiv.append(this.html.dialogButtonBlockDiv);
+	        this.html.dialogButtonBlockDiv.append(this.html.okButton);
+	        this.html.dialogButtonBlockDiv.append(this.html.cancelButton);
+	        this.html.okButton.click(function (){ DirectoryChoicer.okButtonClick(); });
+	        this.html.cancelButton.click(function (){ DirectoryChoicer.cancelButtonClick(); });
+	        this.html.dialogDiv.appendTo('body');
+	        this.showDirs('', this.html.dialogContentDiv);
+    	}
     },
     hide: function (){
         // Hide dialog
