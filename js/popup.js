@@ -366,6 +366,9 @@ var GroupDocsPlugin = {
     		if (success){
     			GroupDocsPlugin.contentShowed();
     			StatusManager.scs('uploadFileStatus', 'File uploaded');
+    			StatusManager.scs('listFilesStatus', 'File uploaded');
+    			$('#fileUpload').val('');
+    			$('#listFilesTab').click();
     		}
     		else {
     			StatusManager.err('uploadFileStatus', error_message);
