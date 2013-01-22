@@ -109,17 +109,21 @@ var GroupDocsPlugin = {
 	},
 	onTabSwitch: function (elem){
 		// Tab switching
-        $('.selected-tab').removeClass('selected-tab');
-        $(elem).addClass('selected-tab');
-        var tabs2blocks = {
-    	    listFilesTab: '#listFilesBlock', 
-    	    showFileTab: '#showFileBlock',
-    	    uploadFileTab: '#uploadFileBlock'
-    	};
-        for (var key in tabs2blocks){
-            $(tabs2blocks[key]).hide();
-        }
-        $(tabs2blocks[$(elem).attr('id')]).show();
+		if ($(elem).attr('id') == 'showFileTab' && $('#fileId').val() == '') {
+			return;
+		}
+		$('.selected-tab').removeClass('selected-tab');
+		$(elem).addClass('selected-tab');
+		var tabs2blocks = {
+			listFilesTab : '#listFilesBlock',
+			showFileTab : '#showFileBlock',
+			uploadFileTab : '#uploadFileBlock'
+		};
+		for ( var key in tabs2blocks) {
+			$(tabs2blocks[key]).hide();
+		}
+		$(tabs2blocks[$(elem).attr('id')]).show();
+		this.onShowDocument(true);
 	},
 	onAuth: function (){
 		// Auth button clicked
@@ -202,11 +206,13 @@ var GroupDocsPlugin = {
 		$('#fileId').val($(this).attr('id'));
 		$('#showBtn, #downloadBtn, #copyBtn, #moveBtn, #renameBtn, #deleteBtn, #embedBtn').removeAttr('disabled');
 	},
-	onShowDocument: function (){
+	onShowDocument: function (noSwitch){
 		// Show document
         var src = 'https://dev-apps.groupdocs.com/document-viewer/Embed/' + $('#fileId').val() + '?quality=50&use_pdf=False&download=False';
         $('#previewFrame').attr('src', src);
-        this.onTabSwitch($('#showFileTab'));
+        if (noSwitch === undefined || noSwitch == false){
+            this.onTabSwitch($('#showFileTab'));
+        }
 	},
 	onDownloadDocument: function (){
 		// Download document
