@@ -14,7 +14,7 @@
     	"default_popup": "popup.html"
     },
     "permissions": [
-    	"https://dev-api.groupdocs.com/*",
-    	"https://api.groupdocs.com/*"
+    	"https://api.groupdocs.com/*",
+    	"https://dev-api.groupdocs.com/*"
     ]
 }

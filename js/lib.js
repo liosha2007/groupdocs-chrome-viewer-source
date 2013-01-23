@@ -194,7 +194,7 @@ var EmbedDialog = {
 	},
 	onGenerate: function (){
 		var tarea = $('#embedDialogTextarea');
-		tarea.html('<iframe src="http://dev-apps.groupdocs.com/document-viewer/Embed/' + this.fileId + '?quality=' + $('#qualityId option:selected').val() + '&use_pdf=' + $('#selectionId').is(':checked') + '&download=' + $('#downloadId').is(':checked') + '&print=' + $('#printId').is(':checked') + '" frameborder="0" width="' + $('#widthId').val() + '" height="' + $('#heightId').val() + '"></iframe>');
+		tarea.html('<iframe src="http://apps.groupdocs.com/document-viewer/Embed/' + this.fileId + '?quality=' + $('#qualityId option:selected').val() + '&use_pdf=' + $('#selectionId').is(':checked') + '&download=' + $('#downloadId').is(':checked') + '&print=' + $('#printId').is(':checked') + '" frameborder="0" width="' + $('#widthId').val() + '" height="' + $('#heightId').val() + '"></iframe>');
 	},
 	onClose: function (){
 		this.hide();
@@ -205,7 +205,7 @@ var EmbedDialog = {
 var GroupDocsManager = {
 	cid: '',
 	pkey: '',
-	server: 'https://dev-api.groupdocs.com/v2.0',
+	server: 'https://api.groupdocs.com/v2.0',
 	_createApiClient: function (pkey){
 		pkey = (pkey === undefined) ? this.pkey : pkey;
 		return new groupdocs.ApiClient(new groupdocs.GroupDocsSecurityHandler(pkey));

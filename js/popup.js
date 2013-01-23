@@ -208,7 +208,7 @@ var GroupDocsPlugin = {
 	},
 	onShowDocument: function (noSwitch){
 		// Show document
-        var src = 'https://dev-apps.groupdocs.com/document-viewer/Embed/' + $('#fileId').val() + '?quality=50&use_pdf=False&download=False';
+        var src = 'https://apps.groupdocs.com/document-viewer/Embed/' + $('#fileId').val() + '?quality=50&use_pdf=False&download=False';
         $('#previewFrame').attr('src', src);
         if (noSwitch === undefined || noSwitch == false){
             this.onTabSwitch($('#showFileTab'));
